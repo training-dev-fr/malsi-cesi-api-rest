@@ -1,9 +1,12 @@
 const http = require('http');
 const app = require('./app.js');
 
+const socketManager = require('./socketManager.js');
+
 const PORT = 3000;
 
 const server = http.createServer(app);
+socketManager.initSocket(server);
 
 server.on('listening',()=> {
     console.log("Server started on port " + PORT);

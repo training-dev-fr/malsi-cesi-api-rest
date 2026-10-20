@@ -21,4 +21,4 @@ server.on('listening',()=> {
 //     res.end('{"status": "ok"}');
 // });
 
-server.listen(PORT);
+server.listen(PORT,"0.0.0.0");

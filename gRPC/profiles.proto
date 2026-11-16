@@ -1,0 +1,9 @@
+syntax = "proto3";
+package pack;
+
+service Profiles{
+    rpc Bonjour (Vide) returns (Salutation);
+}
+
+message Vide {}
+message Salutation { string texte = 1; }

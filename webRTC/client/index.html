@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    Demo webRTC
+    <div class="event"></div>
+    Nom du salon:
+    <input type="text" id="room-name">
+    <button id="join-room">Rejoindre un salon</button>
+    <video id="local-video" autoplay playsinline muted width="320"></video>
+    <button id="start-camera">Démarrer ma caméra</button>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="client.js"></script>
+</body>
+</html>

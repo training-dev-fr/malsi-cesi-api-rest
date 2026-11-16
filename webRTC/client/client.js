@@ -42,6 +42,7 @@ socket.on('room-ready', (room) => {
 });
 
 let pair, canal;
+let pendingCandidates = [];
 
 socket.on('create-offer', async () => {
     pair = createPair();
@@ -54,7 +55,7 @@ function createPair() {
         return pair;
     }
     pair = new RTCPeerConnection({ iceServers: [{ urls: 'stun:stun.l.google.com:19302' }] });
-    for(const track of localStream.getTracks()){
+    for (const track of localStream.getTracks()) {
         pair.addTrack(track, localStream);
     }
     pair.onconnectionstatechange = () => {
@@ -69,6 +70,15 @@ function createPair() {
             log("Canal de données fermé");
         }
     }
+    pair.ontrack = (event) => {
+        document.querySelector('#remote-video').srcObject = event.streams[0];
+        log("Vidéo distante reçue");
+    }
+    pair.onicecandidate = event => {
+        if (event.candidate){
+            socket.emit('ice-candidate',event.candidate.toJSON());
+        }
+    }
     return pair;
 }
 
@@ -81,8 +91,18 @@ socket.on('offer', async offer => {
     log('Réponse envoyée');
 });
 
-socket.on('answer',async (answer) => {
+socket.on('answer', async (answer) => {
     const connection = pair;
     await connection.setRemoteDescription(answer);
     log("Réponse reçue");
 });
+
+socket.on('ice-candidate',async (candidate) => {
+    const connection = createPair();
+    if(connection.remoteDescription){
+        await connection.addIceCandidate(candidate);
+    }else{
+        pendingCandidates.push(candidate);
+    }
+    log('Candidat ICE reçu');
+})

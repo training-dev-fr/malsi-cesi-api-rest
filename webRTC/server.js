@@ -30,7 +30,7 @@ io.on('connection', socket => {
         }
     });
 
-    for(const event of ["offer","answer"]){
+    for(const event of ["offer","answer","ice-candidate"]){
         console.log("Connection rcp reçue, type : " + event)
         socket.on(event, content => {
             if(!socket.data.room){
